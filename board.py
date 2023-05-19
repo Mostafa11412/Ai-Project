@@ -1,6 +1,6 @@
 from PIL import ImageGrab
 import pyautogui
-import numpy as np
+# import numpy as np
 
 # YOU MAY NEED TO CHANGE THESE VALUES BASED ON YOUR SCREEN SIZE
 LEFT = 570
@@ -16,7 +16,7 @@ COLUMN_COUNT = 7
 
 class Board:
     def __init__(self) -> None:
-        self.board = np.zeros((ROW_COUNT,COLUMN_COUNT))
+        self.board = [[EMPTY for i in range(7)] for j in range(6)]
 
     def print_grid(self, grid):
         for i in range(0, len(grid)):
@@ -89,9 +89,9 @@ class Board:
     def get_game_grid(self):
         game_grid = self._get_grid()
         new_grid = self._convert_grid_to_color(game_grid)
-        (is_game_end,player) = self._check_if_game_end(new_grid)
+        is_game_end = self._check_if_game_end(new_grid)
         self.board = new_grid
-        return (self.board, is_game_end,player)
+        return (self.board, is_game_end)
 
     def select_column(self, column):
         pyautogui.click(
