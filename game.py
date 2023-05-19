@@ -34,11 +34,10 @@ def main():
         
 
 
-        best_column = mini_max.mini_max_fun(game_board ,2,-math.inf,math.inf,True)
+        # best_column = mini_max.mini_max_fun(game_board ,2,-math.inf,math.inf,True)
 
-        # random_column = random.randint(0, 6)
-        # board.select_column(random_column)
-        board.select_column(best_column);
+        random_column = random.randint(0, 6)
+        board.select_column(random_column)
 
         time.sleep(2)
 

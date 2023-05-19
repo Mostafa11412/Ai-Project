@@ -69,19 +69,30 @@ class Board:
     def _get_grid(self):
         cropedImage = self._capture_image()
         pixels = self._convert_image_to_grid(cropedImage)
-        # cropedImage.show()
+        cropedImage.show()
         grid = self._transpose_grid(pixels)
         return grid
 
     # def _has_winning_state(self , player):
 
-
+    def _check_if_game_draw(self,grid):
+        for i in range(0, len(grid)):
+            for j in range(0, len(grid[i])):
+                if(grid[i][j] == EMPTY):
+                    return False
+        return True
 
     def _check_if_game_end(self, grid):
         for i in range(0, len(grid)):
             for j in range(0, len(grid[i])):
                 if grid[i][j] == EMPTY and self.board[i][j] != EMPTY:
                     return (True,self.board[i][j])
+
+
+        if(_check_if_game_draw):
+            return(True,EMPTY)
+
+
         return (False,EMPTY)
 
     def get_game_grid(self):
@@ -100,6 +111,9 @@ class Board:
                 grid[i][j]=player
                 return (True,grid)
         return (False,grid)
+
+
+
 
 
 
