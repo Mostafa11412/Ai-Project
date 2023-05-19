@@ -1,5 +1,6 @@
 from PIL import ImageGrab
 import pyautogui
+import numpy as np
 
 # YOU MAY NEED TO CHANGE THESE VALUES BASED ON YOUR SCREEN SIZE
 LEFT = 570
@@ -10,11 +11,12 @@ BOTTOM = 875
 EMPTY = 0
 RED = 1
 BLUE = 2
-
+ROW_COUNT = 6
+COLUMN_COUNT = 7
 
 class Board:
     def __init__(self) -> None:
-        self.board = [[EMPTY for i in range(7)] for j in range(6)]
+        self.board = np.zeros((ROW_COUNT,COLUMN_COUNT))
 
     def print_grid(self, grid):
         for i in range(0, len(grid)):
@@ -69,29 +71,20 @@ class Board:
     def _get_grid(self):
         cropedImage = self._capture_image()
         pixels = self._convert_image_to_grid(cropedImage)
-        cropedImage.show()
+        #cropedImage.show()
         grid = self._transpose_grid(pixels)
         return grid
 
     # def _has_winning_state(self , player):
 
-    def _check_if_game_draw(self,grid):
-        for i in range(0, len(grid)):
-            for j in range(0, len(grid[i])):
-                if(grid[i][j] == EMPTY):
-                    return False
-        return True
 
     def _check_if_game_end(self, grid):
         for i in range(0, len(grid)):
             for j in range(0, len(grid[i])):
                 if grid[i][j] == EMPTY and self.board[i][j] != EMPTY:
-                    return (True,self.board[i][j])
+                    return (True)
 
-
-        # if _check_if_game_draw(grid):
-        #     return(True,EMPTY)
-        return (False,EMPTY)
+        return (False)
 
     def get_game_grid(self):
         game_grid = self._get_grid()
@@ -99,16 +92,6 @@ class Board:
         (is_game_end,player) = self._check_if_game_end(new_grid)
         self.board = new_grid
         return (self.board, is_game_end,player)
-
-
-    def move(self , col , player):
-        j = col
-        grid = self.board
-        for i in range(5, -1, -1):
-            if(self.board[i][j] == EMPTY):
-                grid[i][j]=player
-                return (True,grid)
-        return (False,grid)
 
     def select_column(self, column):
         pyautogui.click(
