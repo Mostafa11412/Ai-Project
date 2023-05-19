@@ -1,6 +1,8 @@
 from board import Board
 import time
 import random
+import mini_max
+
 
 # GAME LINK
 # http://kevinshannon.com/connect4/
