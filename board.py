@@ -73,19 +73,35 @@ class Board:
         grid = self._transpose_grid(pixels)
         return grid
 
+    # def _has_winning_state(self , player):
+
+
+
     def _check_if_game_end(self, grid):
         for i in range(0, len(grid)):
             for j in range(0, len(grid[i])):
                 if grid[i][j] == EMPTY and self.board[i][j] != EMPTY:
-                    return True
-        return False
+                    return (True,self.board[i][j])
+        return (False,EMPTY)
 
     def get_game_grid(self):
         game_grid = self._get_grid()
         new_grid = self._convert_grid_to_color(game_grid)
-        is_game_end = self._check_if_game_end(new_grid)
+        (is_game_end,player) = self._check_if_game_end(new_grid)
         self.board = new_grid
-        return (self.board, is_game_end)
+        return (self.board, is_game_end,player)
+
+
+    def move(self , col , player):
+        j = col
+        grid = self.board
+        for i in range(5, -1, -1):
+            if(self.board[i][j] == EMPTY):
+                grid[i][j]=player
+                return (True,grid)
+        return (False,grid)
+
+
 
     def select_column(self, column):
         pyautogui.click(
