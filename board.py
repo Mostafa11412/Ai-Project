@@ -11,7 +11,7 @@ EMPTY = 0
 RED = 1
 BLUE = 2
 
-# downloaded
+
 class Board:
     def __init__(self) -> None:
         self.board = [[EMPTY for i in range(7)] for j in range(6)]
@@ -69,7 +69,7 @@ class Board:
     def _get_grid(self):
         cropedImage = self._capture_image()
         pixels = self._convert_image_to_grid(cropedImage)
-        cropedImage.show()
+        # cropedImage.show()
         grid = self._transpose_grid(pixels)
         return grid
 
