@@ -25,12 +25,12 @@ def get_Socre_(window , player):
     return score
 
 
-def score_(board, piece):
+def score_(board, player):
 	score = 0
 
 	## Score center column
 	center_array = [int(i) for i in list(board[:, COLUMN_COUNT//2])]
-	center_count = center_array.count(piece)
+	center_count = center_array.count(player )
 	score += center_count * 3
 
 	## Score Horizontal
@@ -38,25 +38,25 @@ def score_(board, piece):
 		row_array = [int(i) for i in list(board[r,:])]
 		for c in range(COLUMN_COUNT-3):
 			window = row_array[c:c+WINDOW_LENGTH]
-			score += get_Score_(window, piece)
+			score += get_Socre_(window, player)
 
 	## Score Vertical
 	for c in range(COLUMN_COUNT):
 		col_array = [int(i) for i in list(board[:,c])]
 		for r in range(ROW_COUNT-3):
 			window = col_array[r:r+WINDOW_LENGTH]
-			score += get_Score_(window, piece)
+			score += get_Socre_(window, player)
 
 	## Score posiive sloped diagonal
 	for r in range(ROW_COUNT-3):
 		for c in range(COLUMN_COUNT-3):
 			window = [board[r+i][c+i] for i in range(WINDOW_LENGTH)]
-			score += get_Score_(window, piece)
+			score += get_Socre_(window, player)
 
 	for r in range(ROW_COUNT-3):
 		for c in range(COLUMN_COUNT-3):
 			window = [board[r+3-i][c+i] for i in range(WINDOW_LENGTH)]
-			score += get_Score_(window, piece)
+			score += get_Socre_(window, player)
 
 	return score
 
@@ -90,9 +90,9 @@ def mini_max_fun(board , depth , alpha , beta , current_player):
                 max_eval = eval
                 column = col
 
-            alpha = max(alpha, eval)
-            if beta <= alpha:
-                break
+            # alpha = max(alpha, eval)
+            # if beta <= alpha:
+            #     break
         return (max_eval,column)
 
     else:
@@ -107,7 +107,7 @@ def mini_max_fun(board , depth , alpha , beta , current_player):
                 eval = min_eval
                 column = col
             # min_eval = min(min_eval, eval)
-            beta = min(beta, eval)
-            if beta <= alpha:
-                break
+            # beta = min(beta, eval)
+            # if beta <= alpha:
+            #     break
         return (min_eval,column)

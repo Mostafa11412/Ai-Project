@@ -89,10 +89,8 @@ class Board:
                     return (True,self.board[i][j])
 
 
-        if(_check_if_game_draw):
-            return(True,EMPTY)
-
-
+        # if _check_if_game_draw(grid):
+        #     return(True,EMPTY)
         return (False,EMPTY)
 
     def get_game_grid(self):
@@ -111,11 +109,6 @@ class Board:
                 grid[i][j]=player
                 return (True,grid)
         return (False,grid)
-
-
-
-
-
 
     def select_column(self, column):
         pyautogui.click(

@@ -5,6 +5,8 @@ import random
 import mini_max
 import math
 
+
+
 # GAME LINK
 # http://kevinshannon.com/connect4/
 
@@ -26,18 +28,9 @@ def main():
         # Insert here the action you want to perform based on the output of the algorithm
         # You can use the following function to select a column
 
-
-
-
-
-    
-        
-
-
-        # best_column = mini_max.mini_max_fun(game_board ,2,-math.inf,math.inf,True)
-
-        random_column = random.randint(0, 6)
-        board.select_column(random_column)
+        best_column = mini_max.mini_max_fun(game_board ,2,-math.inf,math.inf,True) 
+        #random_column = mini_max_fun(board , 5 , 1 ,1 , 1 )
+        board.select_column(best_column)
 
         time.sleep(2)
 
