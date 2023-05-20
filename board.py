@@ -1,6 +1,6 @@
 from PIL import ImageGrab
 import pyautogui
-# import numpy as np
+import numpy as np
 
 # YOU MAY NEED TO CHANGE THESE VALUES BASED ON YOUR SCREEN SIZE
 LEFT = 570

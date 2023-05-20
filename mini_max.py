@@ -100,18 +100,20 @@ def winning_move(board, player):
 
 
 def is_terminal_(board):
-      return winning_move(board , RED) or winning_move(board , BLUE) or len(get_vaild_cols(board))==0
+      return winning_move(board , RED) or winning_move(board , BLUE)
 
 
 def get_vaild_row(board , col):
-      for r in range(ROW_COUNT):
+      for r in range(5, -1, -1):
             if(board[r][col] == EMPTY):
                   return r
     
-      
+
 
 def mini_max_fun(board , depth , alpha , beta , current_player):
     vaild_cols = get_vaild_cols(board)
+    
+
     game_end = is_terminal_(board)
     if depth == 0 or game_end:
         if(game_end):
@@ -133,11 +135,11 @@ def mini_max_fun(board , depth , alpha , beta , current_player):
             row = get_vaild_row(board , col)
             new_board = board.copy()
             new_board[row][col] = RED
-            eval = mini_max_fun(new_board , depth-1 , alpha, beta,BLUE)
+            eval = mini_max_fun(new_board , depth-1 , alpha, beta,BLUE)[1]
             if(eval > max_eval) :
                 max_eval = eval
                 column = col
-            alpha = max(alpha, eval)
+            alpha = max(alpha, max_eval)
             if beta <= alpha:
                 break
         return (column,max_eval)
@@ -149,12 +151,11 @@ def mini_max_fun(board , depth , alpha , beta , current_player):
             row = get_vaild_row(board , row)
             new_board  = board.copy()
             new_board[row][col] = BLUE
-            eval = mini_max_fun(new_board, depth-1, alpha, beta, RED)
+            eval = mini_max_fun(new_board, depth-1, alpha, beta, RED)[1]
             if(eval < min_eval):
                 eval = min_eval
                 column = col
-            min_eval = min(min_eval, eval)
-            beta = min(beta, eval)
+            beta = min(beta, min_eval)
             if beta <= alpha:
                 break
         return (column,min_eval)
