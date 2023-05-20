@@ -74,7 +74,6 @@ class Board:
         grid = self._transpose_grid(pixels)
         return grid
 
-    # def _has_winning_state(self , player):
 
 
     def _check_if_game_end(self, grid):
