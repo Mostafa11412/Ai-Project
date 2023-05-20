@@ -1,6 +1,5 @@
 from PIL import ImageGrab
 import pyautogui
-import numpy as np
 
 # YOU MAY NEED TO CHANGE THESE VALUES BASED ON YOUR SCREEN SIZE
 LEFT = 570
@@ -97,9 +96,3 @@ class Board:
         pyautogui.click(
             self._get_grid_cordinates()[column][1] + LEFT,
             self._get_grid_cordinates()[column][0] + TOP, )
-
-
-
-
-
-
