@@ -127,6 +127,65 @@ def calculate_score(board, player):
     return score
 
 
+def mini_max_fun(board , depth , alpha , beta , current_player):
+    vaild_cols = get_vaild_cols(board)
+
+
+    
+
+    game_end = is_terminal_(board)
+    if depth == 0 or game_end:
+        if(game_end):
+            if(winning_move(board , RED)):
+                return (None,math.inf)
+            elif(winning_move(board , BLUE)):
+                return(None,-math.inf)
+            else: # draw 
+                return(None,0)
+        else : 
+             return (None , heuristic(board)) 
+
+    if current_player == RED:
+        max_eval = -math.inf
+
+        column = vaild_cols[0] # set the columns with value 
+
+        for col in vaild_cols:
+            row = get_vaild_row(board , col)
+            new_board = []
+            for i in range(len(board)):
+                new_board.append(list(board[i]))
+            new_board[row][col] = RED
+            eval = mini_max_fun(new_board , depth-1 , alpha, beta,BLUE)[1]
+            if(eval >= max_eval) :
+                max_eval = eval
+                column = col
+            alpha = max(alpha, max_eval)
+            if beta <= alpha:
+                break
+        return (column,max_eval)
+
+        
+
+    else:
+        min_eval = math.inf
+        column = vaild_cols[0]
+        for col in vaild_cols:
+            row = get_vaild_row(board , col)
+            new_board = []
+            for i in range(len(board)):
+                new_board.append(list(board[i]))
+            new_board[row][col] = BLUE
+            eval = mini_max_fun(new_board, depth-1, alpha, beta, RED)[1]
+            if(eval <= min_eval):
+                min_eval = eval 
+                column = col
+            beta = min(beta, min_eval)
+            if beta <= alpha:
+                break
+        return (column,min_eval)
+    
+#UPDATED
 def heuristic(state):
         heur = 0
 
@@ -212,67 +271,3 @@ def heuristic(state):
                 except IndexError:
                     pass
         return heur
-
-
-
-
-
-
-
-def mini_max_fun(board , depth , alpha , beta , current_player):
-    vaild_cols = get_vaild_cols(board)
-
-
-    
-
-    game_end = is_terminal_(board)
-    if depth == 0 or game_end:
-        if(game_end):
-            if(winning_move(board , RED)):
-                return (None,math.inf)
-            elif(winning_move(board , BLUE)):
-                return(None,-math.inf)
-            else: # draw 
-                return(None,0)
-        else : 
-             return (None , heuristic(board)) 
-
-    if current_player == RED:
-        max_eval = -math.inf
-
-        column = vaild_cols[0] # set the columns with value 
-
-        for col in vaild_cols:
-            row = get_vaild_row(board , col)
-            new_board = []
-            for i in range(len(board)):
-                new_board.append(list(board[i]))
-            new_board[row][col] = RED
-            eval = mini_max_fun(new_board , depth-1 , alpha, beta,BLUE)[1]
-            if(eval >= max_eval) :
-                max_eval = eval
-                column = col
-            alpha = max(alpha, max_eval)
-            if beta <= alpha:
-                break
-        return (column,max_eval)
-
-        
-
-    else:
-        min_eval = math.inf
-        column = vaild_cols[0]
-        for col in vaild_cols:
-            row = get_vaild_row(board , col)
-            new_board = []
-            for i in range(len(board)):
-                new_board.append(list(board[i]))
-            new_board[row][col] = BLUE
-            eval = mini_max_fun(new_board, depth-1, alpha, beta, RED)[1]
-            if(eval <= min_eval):
-                min_eval = eval 
-                column = col
-            beta = min(beta, min_eval)
-            if beta <= alpha:
-                break
-        return (column,min_eval)
