@@ -6,39 +6,6 @@ BLUE = 2
 ROW_COUNT = 6
 COLUMN_COUNT = 7
 WINDOW_LENGTH = 4
-def count_streaks(board, player):
-    rows, cols = len(board), len(board[0])
-    count = 0
-
-    # Check horizontal streaks
-    for row in range(rows):
-        for col in range(cols - 3):
-            if board[row][col] == player and board[row][col + 1] == player and \
-                    board[row][col + 2] == player and board[row][col + 3] == player:
-                count += 1
-
-    # Check vertical streaks
-    for row in range(rows - 3):
-        for col in range(cols):
-            if board[row][col] == player and board[row + 1][col] == player and \
-                    board[row + 2][col] == player and board[row + 3][col] == player:
-                count += 1
-
-    # Check diagonal (from top-left to bottom-right) streaks
-    for row in range(rows - 3):
-        for col in range(cols - 3):
-            if board[row][col] == player and board[row + 1][col + 1] == player and \
-                    board[row + 2][col + 2] == player and board[row + 3][col + 3] == player:
-                count += 1
-
-    # Check diagonal (from top-right to bottom-left) streaks
-    for row in range(rows - 3):
-        for col in range(3, cols):
-            if board[row][col] == player and board[row + 1][col - 1] == player and \
-                    board[row + 2][col - 2] == player and board[row + 3][col - 3] == player:
-                count += 1
-
-    return count
 
 def is_valid_cell(board , col):
       return board[0][col] == 0 # if the column has at least one empty cell 
@@ -99,93 +66,7 @@ def get_opponent(player):
 def is_draw(board) :
     return (len(get_vaild_cols(board)) == 0)
 
-def calculate_score(board, player):
-    # Define the scoring values
-    win_score = 1000
-    lose_score = -1000
 
-    # Check if the game is over (winning or draw)
-    if winning_move(board, player):
-        return win_score
-    elif winning_move(board, get_opponent(player)):
-        return lose_score
-    elif is_draw(board):
-        return 0
-
-    # Calculate the score based on the current game state
-    score = 0
-
-    # Evaluate the board based on the number of consecutive pieces
-    # for the current player and the opponent
-    player_streaks = count_streaks(board, player)
-    opponent_streaks = count_streaks(board, get_opponent(player))
-
-    # Update the score based on the streaks
-    score += player_streaks * 10
-    score -= opponent_streaks * 10
-
-    return score
-
-
-def mini_max_fun(board , depth , alpha , beta , current_player):
-    vaild_cols = get_vaild_cols(board)
-
-
-    
-
-    game_end = is_terminal_(board)
-    if depth == 0 or game_end:
-        if(game_end):
-            if(winning_move(board , RED)):
-                return (None,math.inf)
-            elif(winning_move(board , BLUE)):
-                return(None,-math.inf)
-            else: # draw 
-                return(None,0)
-        else : 
-             return (None , heuristic(board)) 
-
-    if current_player == RED:
-        max_eval = -math.inf
-
-        column = vaild_cols[0] # set the columns with value 
-
-        for col in vaild_cols:
-            row = get_vaild_row(board , col)
-            new_board = []
-            for i in range(len(board)):
-                new_board.append(list(board[i]))
-            new_board[row][col] = RED
-            eval = mini_max_fun(new_board , depth-1 , alpha, beta,BLUE)[1]
-            if(eval >= max_eval) :
-                max_eval = eval
-                column = col
-            alpha = max(alpha, max_eval)
-            if beta <= alpha:
-                break
-        return (column,max_eval)
-
-        
-
-    else:
-        min_eval = math.inf
-        column = vaild_cols[0]
-        for col in vaild_cols:
-            row = get_vaild_row(board , col)
-            new_board = []
-            for i in range(len(board)):
-                new_board.append(list(board[i]))
-            new_board[row][col] = BLUE
-            eval = mini_max_fun(new_board, depth-1, alpha, beta, RED)[1]
-            if(eval <= min_eval):
-                min_eval = eval 
-                column = col
-            beta = min(beta, min_eval)
-            if beta <= alpha:
-                break
-        return (column,min_eval)
-    
-#UPDATED
 def heuristic(state):
         heur = 0
 
@@ -271,3 +152,82 @@ def heuristic(state):
                 except IndexError:
                     pass
         return heur
+
+
+
+
+def evaluate_window(window, player):
+    score = 0
+    opponent = get_opponent(player)  # Assuming player is either 1 or 2
+
+    if window.count(player) == 4:
+        score += 100
+    elif window.count(player) == 3 and window.count(0) == 1:
+        score += 5
+    elif window.count(player) == 2 and window.count(0) == 2:
+        score += 2
+
+    if window.count(opponent) == 3 and window.count(0) == 1:
+        score -= 4
+
+    return score
+
+
+def mini_max_fun(board , depth , alpha , beta , current_player):
+    vaild_cols = get_vaild_cols(board)
+
+
+    
+
+    game_end = is_terminal_(board)
+    if depth == 0 or game_end:
+        if(game_end):
+            if(winning_move(board , RED)):
+                return (None,100000000000000)
+            elif(winning_move(board , BLUE)):
+                return(None,-100000000000000)
+            else: # draw 
+                return(None,0)
+        else : 
+             return (None , heuristic(board)) 
+
+    if current_player == RED:
+        max_eval = -math.inf
+
+        column = vaild_cols[0] # set the columns with value 
+
+        for col in vaild_cols:
+            row = get_vaild_row(board , col)
+            
+            new_board = []
+            for i in range(len(board)):
+                new_board.append(list(board[i]))
+            new_board[row][col] = RED
+            eval = mini_max_fun(new_board , depth-1 , alpha, beta,BLUE)[1]
+            if(eval > max_eval) :
+                max_eval = eval
+                column = col
+            alpha = max(alpha, max_eval)
+            if beta <= alpha:
+                break
+        return (column,max_eval)
+
+        
+
+    else:
+        min_eval = math.inf
+        column = vaild_cols[0]
+        for col in vaild_cols:
+            row = get_vaild_row(board , col)
+            new_board = []
+            for i in range(len(board)):
+                new_board.append(list(board[i]))
+            new_board[row][col] = BLUE
+            eval = mini_max_fun(new_board, depth-1, alpha, beta, RED)[1]
+            if(eval < min_eval):
+                min_eval = eval 
+                column = col
+            beta = min(beta, min_eval)
+            if beta <= alpha:
+                break
+        return (column,min_eval)

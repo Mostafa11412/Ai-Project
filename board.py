@@ -74,6 +74,7 @@ class Board:
         grid = self._transpose_grid(pixels)
         return grid
 
+    # def _has_winning_state(self , player):
 
 
     def _check_if_game_end(self, grid):
@@ -91,7 +92,18 @@ class Board:
         self.board = new_grid
         return (self.board, is_game_end)
 
+    def _get_grid_cordinates_for_click(self):
+        startCord = (50, 55)
+        cordArr = []
+        for i in range(0, 6):
+            for j in range(0, 7):
+                x = startCord[0] + i * 115
+                y = startCord[1] + j * 112
+                cordArr.append((x, y))
+        return cordArr
+
     def select_column(self, column):
         pyautogui.click(
-            self._get_grid_cordinates()[column][1] + LEFT,
-            self._get_grid_cordinates()[column][0] + TOP, )
+            self._get_grid_cordinates_for_click()[column][1] + LEFT,
+            self._get_grid_cordinates_for_click()[column][0] + TOP,
+        )
